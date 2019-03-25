@@ -9,7 +9,3 @@
     name: 'stocktools'
   }
 </script>
-
-<style>
-  /* CSS */
-</style>

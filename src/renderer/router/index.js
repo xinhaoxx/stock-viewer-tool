@@ -6,13 +6,13 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '*',
+      redirect: '/'
+    },
+    {
       path: '/',
       name: 'index',
       component: require('@/view/index').default
-    },
-    {
-      path: '*',
-      redirect: '/'
     }
   ]
 })
