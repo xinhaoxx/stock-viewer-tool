@@ -1,0 +1,200 @@
+$--gain-more-color: #F84B4B;
+$--gain-less-color: #45AF26;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+    -moz-user-select: none; /* Firefox */
+    user-select: none;
+}
+
+body {
+    font-family: PingFang SC, 'Source Sans Pro', sans-serif;
+    padding: 2px;
+}
+
+#box {
+    width: 100%;
+    border-radius: 2px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+
+    > .header {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        justify-content: space-between;
+        background-color: #f8f8f8;
+        $--header-height: 32px;
+
+        > h1 {
+            padding: 0 12px;
+            font-size: 14px;
+            line-height: $--header-height;
+        }
+
+        > .action-buttons {
+            display: flex;
+
+            > a {
+                line-height: $--header-height;
+                font-size: 13px;
+                text-decoration: none;
+                color: #000;
+
+                > i {
+                    margin-right: 3px;
+                }
+
+                &.action-add {
+                    display: flex;
+                    padding: 0 10px;
+                    align-items: center;
+
+                    &:hover {
+                        background-color: #ddd;
+                    }
+                }
+
+                &.action-close {
+                    display: block;
+                    width: $--header-height;
+                    text-align: center;
+
+                    &:hover {
+                        background-color: $--gain-more-color;
+                        color: #fff;
+                    }
+                }
+            }
+
+        }
+    }
+
+    > .stock-index {
+        display: flex;
+        border-bottom: 1px solid #eee;
+
+        > div {
+            width: 50%;
+            font-size: 13px;
+            box-sizing: border-box;
+            padding: 10px 0 10px 12px;
+            margin: 10px 0;
+
+
+            > .upper-info {
+                display: flex;
+                align-items: baseline;
+                font-weight: bold;
+
+                > h3 {
+                    font-size: 13px;
+                }
+
+                > p {
+                    margin-left: 10px;
+                }
+            }
+
+            > .index-gain {
+                &.gain-more {
+                    color: $--gain-more-color;
+                }
+
+                &.gain-less {
+                    color: $--gain-less-color;
+                }
+            }
+        }
+
+        div + div {
+            border-left: 1px solid #eee;
+        }
+    }
+
+
+    .optional-stock-table {
+        overflow: hidden;
+
+        .stock-info {
+            > h3 {
+                padding-top: 4px;
+                margin-bottom: 5px;
+                font-size: 14px;
+                line-height: 14px;
+                color: #000;
+            }
+
+            > p {
+                font-size: 11px;
+                line-height: 11px;
+                color: #aaa;
+            }
+        }
+
+        .stock-price {
+            font-weight: bold;
+        }
+
+        .gain-price {
+            padding-right: 10px;
+            color: #000;
+
+            &.gain-more {
+                color: $--gain-more-color;
+            }
+
+            &.gain-less {
+                color: $--gain-less-color;
+            }
+        }
+
+        .gain-percent {
+            display: inline-block;
+            padding: 0 5px;
+            width: 65px;
+            color: #fff;
+            text-align: right;
+            font-weight: bold;
+            border-radius: 2px;
+            background-color: #ccc;
+
+            &.gain-more {
+                background-color: $--gain-more-color;
+            }
+
+            &.gain-less {
+                background-color: $--gain-less-color;
+            }
+        }
+    }
+}
+
+$--scroll-bar-color: #333;
+::selection {
+    background: #ddd;
+    color: $--scroll-bar-color;
+}
+
+::-webkit-selection {
+    background: #ddd;
+    color: $--scroll-bar-color;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    overflow: auto;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #eee;
+}
