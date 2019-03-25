@@ -13,21 +13,22 @@ $--gain-less-color: #45AF26;
 body {
     font-family: PingFang SC, 'Source Sans Pro', sans-serif;
     padding: 2px;
+    background: rgba(0, 0, 0, 0);
 }
 
 #box {
     width: 100%;
     border-radius: 2px;
     overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+    border: 2px solid rgba(0, 0, 0, .15);
 
     > .header {
         display: flex;
         border-bottom: 1px solid #eee;
         justify-content: space-between;
         background-color: #f8f8f8;
-        $--header-height: 32px;
+        $--header-height: 35px;
+        -webkit-app-region: drag; // header 可拖拽
 
         > h1 {
             padding: 0 12px;
@@ -37,45 +38,47 @@ body {
 
         > .action-buttons {
             display: flex;
+            align-items: center;
+            padding-right: 5px;
+            -webkit-app-region: no-drag; // 按钮不可拖拽
+
 
             > a {
-                line-height: $--header-height;
-                font-size: 13px;
-                text-decoration: none;
-                color: #000;
+                display: block;
+                height: 14px;
+                line-height: 14px;
+                width: 25px;
+                text-align: center;
+                cursor: pointer;
+                color: #888;
 
                 > i {
-                    margin-right: 3px;
+                    font-size: 14px;
                 }
 
-                &.action-add {
-                    display: flex;
-                    padding: 0 10px;
-                    align-items: center;
-
-                    &:hover {
-                        background-color: #ddd;
-                    }
+                &:hover {
+                    color: #000;
                 }
 
-                &.action-close {
-                    display: block;
-                    width: $--header-height;
-                    text-align: center;
+                &.button-min {
+                    margin-left: 5px;
+                    padding-left: 5px;
+                    border-left: 1px solid #e0e0e0;
+                }
 
+                &.button-close {
                     &:hover {
-                        background-color: $--gain-more-color;
-                        color: #fff;
+                        color: #F84B4B;
                     }
                 }
             }
-
         }
     }
 
     > .stock-index {
         display: flex;
         border-bottom: 1px solid #eee;
+        background-color: #fff;
 
         > div {
             width: 50%;
@@ -197,4 +200,17 @@ $--scroll-bar-color: #333;
 
 ::-webkit-scrollbar-track {
     background-color: #eee;
+}
+
+
+/* iconfont's default style
+-------------------------- */
+
+[class^="icon-"] {
+    display: inline-block;
+    font-family: "icon" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }

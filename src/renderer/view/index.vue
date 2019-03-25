@@ -2,19 +2,16 @@
   <div id="box">
     <!--顶栏部分-->
     <div class="header">
-      <h1 style="-webkit-app-region: drag;cursor:move;">自选小工具</h1>
-      <!--<a href="javascript:void(0);">X</a>-->
+      <h1>自选小工具</h1>
       <div class="action-buttons">
-
-        <a href="javascript:;" class="action-add" @click="addOptional">
-          <i class="el-icon-circle-plus-outline"></i>
-          <span>自选</span>
+        <a class="button-pin" @click="addOptional">
+          <i class="icon-add"></i>
         </a>
-        <a href="javascript:;" class="action-close" @click="setWinStick">
-          <i class="el-icon-view"></i>
+        <a class="button-min" @click="setWinMin">
+          <i class="icon-min"></i>
         </a>
-        <a href="javascript:;" class="action-close" @click="setWinClose">
-          <i class="el-icon-close"></i>
+        <a class="button-close" @click="setWinClose">
+          <i class="icon-close"></i>
         </a>
       </div>
     </div>
@@ -147,8 +144,8 @@
       setWinClose () {
         ipc.send('close')
       },
-      setWinStick () {
-        ipc.send('stick')
+      setWinMin () {
+        ipc.send('minimize')
       },
       addOptional () {
         this.$refs['optionalDialog'].show()
