@@ -136,6 +136,7 @@
             this.optionals.push(stock)
           }
         })
+        this.updateToolTips(this.optionals)
       },
       redirectToSnowBall (row) {
         shell.openExternal('https://xueqiu.com/S/' + row.code)
@@ -160,6 +161,13 @@
           }
         })
         localStorage.setItem('optionals', final.join(','))
+      },
+      updateToolTips (data) {
+        let content = data.map(item => {
+          return `${item.name}：当前价 ¥${item.price},涨跌 ¥${item.gain.price}（${item.gain.percent}%）`
+        })
+        console.log(content.join('\n'))
+        ipc.send('update', content.join('\n'))
       }
     }
   }

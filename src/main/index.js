@@ -14,6 +14,7 @@ let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
+let tray
 
 function createWindow () {
   /**
@@ -36,7 +37,7 @@ function createWindow () {
   /**
    * 系统托盘图标
    */
-  const tray = new Tray('static/stock.ico')
+  tray = new Tray('static/stock.ico') // 系统托盘
   tray.setToolTip('自选小工具')
   tray.on('click', () => {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
@@ -86,5 +87,8 @@ const registerIPC = function () {
   })
   ipcMain.on('minimize', () => {
     mainWindow.minimize()
+  })
+  ipcMain.on('update', (event, arg) => {
+    tray.setToolTip('自选小工具：\n' + arg)
   })
 }
