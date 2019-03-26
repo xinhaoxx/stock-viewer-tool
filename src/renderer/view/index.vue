@@ -17,7 +17,7 @@
     </div>
     <!--指数部分-->
     <div class="stock-index">
-      <div v-for="(item,index) in indexs" :key="index">
+      <div v-for="(item,index) in indexs" :key="index" @click="redirectToSnowBall(item)">
         <div class="upper-info">
           <h3>{{item.name}}</h3>
           <p>{{item.price}}</p>
@@ -49,6 +49,12 @@
             <p class="stock-price">{{props.row.price}}</p>
           </template>
         </el-table-column>
+        <el-table-column label="成交量" align="right">
+          <template slot-scope="props">
+            <p class="stock-volume">{{transVolume(props.row.volume)}} {{props.row.code.indexOf('hk')>-1 ?
+              '万股':(props.row.volume.length > 4 ? '万手':'手')}}</p>
+          </template>
+        </el-table-column>
         <el-table-column prop="gain.price" label="涨跌价" align="right" sortable>
           <template slot-scope="props">
             <span class="gain-price"
@@ -74,7 +80,7 @@
   const shell = require('electron').shell
   const ipc = window.require('electron').ipcRenderer
 
-  const stocksIndex = ['sh000001', 'sz399001'] // 指数
+  const stocksIndex = ['sh000001', 'sz399001', 'sz399006'] // 指数
 
   const apiUrl = 'http://qt.gtimg.cn/' // 接口地址
 
@@ -128,9 +134,10 @@
             gain: {
               price: content[4],
               percent: content[5]
-            }
+            },
+            volume: content[6]
           }
-          if (index < 2) {
+          if (index < stocksIndex.length) {
             this.indexs.push(stock)
           } else {
             this.optionals.push(stock)
@@ -138,19 +145,24 @@
         })
         this.updateToolTips(this.optionals)
       },
+      // 点击跳转雪球网站
       redirectToSnowBall (row) {
-        shell.openExternal('https://xueqiu.com/S/' + row.code)
-        console.log(row)
+        let marketPrefix = row.code.substring(0, 2).toLowerCase()
+        shell.openExternal('https://xueqiu.com/S/' + (marketPrefix === 'hk' ? row.code.substring(2, 7) : row.code))
       },
+      // 关闭窗口
       setWinClose () {
         ipc.send('close')
       },
+      // 最小化窗口
       setWinMin () {
         ipc.send('minimize')
       },
+      // 添加自选
       addOptional () {
         this.$refs['optionalDialog'].show()
       },
+      // 删除自选
       deleteStock (row) {
         let storage = localStorage.getItem('optionals')
         let storageOptional = storage.split(',')
@@ -162,18 +174,30 @@
         })
         localStorage.setItem('optionals', final.join(','))
       },
+      // 更新托盘提示
       updateToolTips (data) {
         let content = data.map(item => {
           return `${item.name}：当前价 ¥${item.price},涨跌 ¥${item.gain.price}（${item.gain.percent}%）`
         })
         ipc.send('update', content.join('\n'))
       },
+      // 鼠标进入
       mouseEnter () {
         ipc.send('mouseenter')
       },
+      // 鼠标移出
       mouseLeave () {
-        console.log('mouseleave')
         ipc.send('mouseleave')
+      },
+      transVolume (number) {
+        number = parseInt(number) + ''
+        if (number.length > 4) {
+          let integer = number.substring(0, number.length - 4)
+          let decimal = integer.length > 3 ? '' : ('.' + number.substring(number.length - 5, number.length - 3))
+          return integer + decimal
+        } else {
+          return number
+        }
       }
     }
   }

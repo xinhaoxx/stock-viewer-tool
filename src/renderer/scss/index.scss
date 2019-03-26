@@ -81,7 +81,7 @@ body {
         background-color: #fff;
 
         > div {
-            width: 50%;
+            width: 33.333%;
             font-size: 13px;
             box-sizing: border-box;
             padding: 10px 0 10px 12px;
@@ -139,12 +139,19 @@ body {
         }
 
         .stock-price {
+            width: 50px;
+            font-weight: bold;
+        }
+
+        .stock-volume {
+            width: 70px;
             font-weight: bold;
         }
 
         .gain-price {
             padding-right: 10px;
             color: #000;
+            font-weight: bold;
 
             &.gain-more {
                 color: $--gain-more-color;
