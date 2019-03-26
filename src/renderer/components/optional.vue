@@ -12,11 +12,6 @@
                   size="small"
                   style="width:100%;"
                   maxlength="6">
-          <el-select v-model="form.market" slot="prepend" placeholder="请选择" style="width:80px;">
-            <el-option label="上证" value="SH"></el-option>
-            <el-option label="深证" value="SZ"></el-option>
-            <el-option label="港股" value="HK"></el-option>
-          </el-select>
         </el-input>
       </el-form-item>
     </el-form>
@@ -31,10 +26,9 @@
   export default {
     data () {
       const checkCode = (rule, value, callback) => {
-        console.log(value)
         if (!value) {
           return callback(new Error('股票代码不能为空'))
-        } else if (!/^\d{4,6}$/.test(value)) {
+        } else if (!/^\d{5,6}$/.test(value)) {
           callback(new Error('股票代码不正确'))
         } else {
           callback()
@@ -43,8 +37,7 @@
       return {
         isVisible: false,
         form: {
-          code: null,
-          market: 'SH'
+          code: null
         },
         rules: {
           code: [
@@ -54,9 +47,11 @@
       }
     },
     methods: {
+      // 显示
       show () {
         this.isVisible = true
       },
+      // 验证表单
       validate () {
         this.$refs['form'].validate(valid => {
           if (valid) {
@@ -64,8 +59,10 @@
           }
         })
       },
+      // 执行添加操作
       handleAction () {
-        let finalCode = this.form.market + this.form.code
+        let market = this.checkMarket(this.form.code)
+        let finalCode = market + this.form.code
         let storage = localStorage.getItem('optionals')
         if (storage !== null && storage !== '') {
           let splitCode = storage.split(',')
@@ -89,6 +86,16 @@
           localStorage.setItem('optionals', finalCode)
           this.form.code = null
           this.isVisible = false
+        }
+      },
+      // 获取代码所在市场
+      checkMarket (code) {
+        const shRules = [5, 6, 7, 9] // 沪配,沪A,沪新,沪B
+        if (code.length === 6) {
+          let firstNumber = parseInt(code.substring(0, 1))
+          return shRules.indexOf(firstNumber) > -1 ? 'SH' : 'SZ' // 非沪开头均为深
+        } else {
+          return 'HK'
         }
       }
     }
