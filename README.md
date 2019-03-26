@@ -3,7 +3,9 @@
 > 基于 Electron + Vue 的实时股价查看器（工具）
 
 #### 图片预览
-![Image text](https://i.loli.net/2019/03/25/5c983ddd7ec07.png)
+![1.png](https://i.loli.net/2019/03/26/5c9981cb106dd.png)
+![2.png](https://i.loli.net/2019/03/26/5c9981cb02622.png)
+![3.png](https://i.loli.net/2019/03/26/5c9981cb119e9.png)
 
 #### Build Setup
 
