@@ -1,5 +1,5 @@
 <template>
-  <div id="box">
+  <div id="box" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
     <!--顶栏部分-->
     <div class="header">
       <h1>自选小工具</h1>
@@ -166,8 +166,14 @@
         let content = data.map(item => {
           return `${item.name}：当前价 ¥${item.price},涨跌 ¥${item.gain.price}（${item.gain.percent}%）`
         })
-        console.log(content.join('\n'))
         ipc.send('update', content.join('\n'))
+      },
+      mouseEnter () {
+        ipc.send('mouseenter')
+      },
+      mouseLeave () {
+        console.log('mouseleave')
+        ipc.send('mouseleave')
       }
     }
   }
