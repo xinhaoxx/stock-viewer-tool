@@ -3,9 +3,10 @@
 > 基于 Electron + Vue 的实时股价查看器（工具）
 
 #### 图片预览
-![1.png](https://i.loli.net/2019/03/26/5c9981cb106dd.png)
-![2.png](https://i.loli.net/2019/03/26/5c9981cb02622.png)
-![3.png](https://i.loli.net/2019/03/26/5c9981cb119e9.png)
+![1.png](https://i.loli.net/2019/03/27/5c9b1465873dd.png)
+![2.png](https://i.loli.net/2019/03/27/5c9b1465850cf.png)
+![3.png](https://i.loli.net/2019/03/27/5c9b146590301.png)
+![4.png](https://i.loli.net/2019/03/27/5c9b146585867.png)
 
 #### Build Setup
 
@@ -28,7 +29,7 @@ npm run lint
 ````
 1.接口使用的是腾讯股票接口
 
-2.左键双击直接跳转查看详情，右键删除
+2.右键菜单可选择查看详情（雪球或股吧）
 
 3.支持深沪港
 
