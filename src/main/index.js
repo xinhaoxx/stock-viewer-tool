@@ -112,13 +112,12 @@ const registerIPC = function () {
         mainWindow.setPosition(pos[0], i)
       }
       isAnimating = false
-      console.log('执行完下拉')
     }
   })
   ipcMain.on('mouseleave', () => {
     if (isAnimating) return false
     let pos = mainWindow.getPosition()
-    if (pos[1] === 0) {
+    if (pos[1] <= 0) {
       timeout = setTimeout(() => {
         isAnimating = true
         const height = mainWindow.getSize()[1]

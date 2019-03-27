@@ -20,7 +20,8 @@ body {
     width: 100%;
     border-radius: 2px;
     overflow: hidden;
-    border: 2px solid rgba(0, 0, 0, .15);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+    //border: 2px solid rgba(0, 0, 0, .15);
 
     > .header {
         display: flex;
@@ -28,7 +29,6 @@ body {
         justify-content: space-between;
         background-color: #f8f8f8;
         $--header-height: 35px;
-        -webkit-app-region: drag; // header 可拖拽
 
         > h1 {
             padding: 0 12px;

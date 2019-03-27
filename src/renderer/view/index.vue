@@ -79,6 +79,7 @@
 
   const shell = require('electron').shell
   const ipc = window.require('electron').ipcRenderer
+  const drag = require('electron-drag')
 
   const stocksIndex = ['sh000001', 'sz399001', 'sz399006'] // 指数
 
@@ -95,7 +96,14 @@
       }
     },
     mounted () {
+      // 轮训获取数据
       setInterval(this.fetchData, 1000)
+      // 使用 electron-drag 解决顶栏无法捕获鼠标事件的问题（暂不支持linux）
+      drag('.header')
+      // 如果不支持则使用样式的方式
+      if (!drag.supported) {
+        document.querySelector('.header').style['-webkit-app-region'] = 'drag'
+      }
     },
     methods: {
       // 获取自选股数据
@@ -189,6 +197,7 @@
       mouseLeave () {
         ipc.send('mouseleave')
       },
+      // 将金额转为万为单位
       transVolume (number) {
         number = parseInt(number) + ''
         if (number.length > 4) {
