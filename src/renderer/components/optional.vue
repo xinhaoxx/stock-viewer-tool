@@ -11,14 +11,11 @@
                   placeholder="请输入股票代码"
                   size="small"
                   style="width:100%;"
-                  maxlength="6">
+                  maxlength="6"
+                  @keyup.enter.native="validate">
         </el-input>
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-    <el-button type="primary" size="small" @click="validate">确 定</el-button>
-    <el-button @click="isVisible = false" size="small">取 消</el-button>
-  </span>
   </el-dialog>
 </template>
 
@@ -105,6 +102,7 @@
   .optional-dialog {
     * {
       font-family: PingFang SC, 'Source Sans Pro', sans-serif;
+      text-align: center;
     }
 
     .el-dialog__header {
@@ -112,17 +110,17 @@
     }
 
     .el-dialog__body {
-      padding-bottom: 0;
+      padding-bottom: 25px;
 
       h3 {
         margin-bottom: 10px;
         font-size: 14px;
         text-align: center;
       }
+      .el-form-item__error{
+        width: 100%;
+      }
     }
 
-    .el-dialog__footer {
-      padding-top: 0;
-    }
   }
 </style>
