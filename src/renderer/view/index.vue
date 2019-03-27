@@ -17,7 +17,7 @@
     </div>
     <!--指数部分-->
     <div class="stock-index">
-      <div v-for="(item,index) in indexs" :key="index" @click="redirectToSnowBall(item)">
+      <div v-for="(item,index) in indexs" :key="index" @contextmenu="showContext(item)">
         <div class="upper-info">
           <h3>{{item.name}}</h3>
           <p>{{item.price}}</p>
@@ -33,8 +33,7 @@
     <div class="table-container">
       <el-table class="optional-stock-table" :data="optionals"
                 height="310" size="small" :header-cell-style="{padding:0}"
-                @row-dblclick="redirectToSnowBall"
-                @row-contextmenu="deleteStock">
+                @row-contextmenu="showContext">
         <el-table-column
                 label="股票">
           <template slot-scope="props">
@@ -51,7 +50,7 @@
         </el-table-column>
         <el-table-column label="成交量" align="right">
           <template slot-scope="props">
-            <p class="stock-volume">{{transVolume(props.row.volume)}} {{props.row.code.indexOf('hk')>-1 ?
+            <p class="stock-volume">{{transVolume(props.row.volume)}}{{props.row.code.indexOf('hk')>-1 ?
               '万股':(props.row.volume.length > 4 ? '万手':'手')}}</p>
           </template>
         </el-table-column>
@@ -104,6 +103,8 @@
       if (!drag.supported) {
         document.querySelector('.header').style['-webkit-app-region'] = 'drag'
       }
+
+      this.initIpcListener()
     },
     methods: {
       // 获取自选股数据
@@ -153,11 +154,7 @@
         })
         this.updateToolTips(this.optionals)
       },
-      // 点击跳转雪球网站
-      redirectToSnowBall (row) {
-        let marketPrefix = row.code.substring(0, 2).toLowerCase()
-        shell.openExternal('https://xueqiu.com/S/' + (marketPrefix === 'hk' ? row.code.substring(2, 7) : row.code))
-      },
+
       // 关闭窗口
       setWinClose () {
         ipc.send('close')
@@ -170,17 +167,26 @@
       addOptional () {
         this.$refs['optionalDialog'].show()
       },
+      showContext (row) {
+        ipc.send('rightClick', row.code)
+      },
       // 删除自选
-      deleteStock (row) {
+      deleteStock (code) {
         let storage = localStorage.getItem('optionals')
         let storageOptional = storage.split(',')
         let final = []
         storageOptional.forEach(item => {
-          if (item.toLowerCase() !== row.code.toLowerCase()) {
+          if (item.toLowerCase() !== code.toLowerCase()) {
             final.push(item)
           }
         })
         localStorage.setItem('optionals', final.join(','))
+
+        this.$toasted.show('已删除', {
+          theme: 'toasted-primary',
+          position: 'bottom-center',
+          duration: 2000
+        })
       },
       // 更新托盘提示
       updateToolTips (data) {
@@ -207,6 +213,28 @@
         } else {
           return number
         }
+      },
+      // 主线程事件监听
+      initIpcListener () {
+        ipc.on('show-xueqiu', (event, code) => {
+          this.openInXueQiu(code)
+        })
+        ipc.on('show-guba', (event, code) => {
+          this.openInGuBa(code)
+        })
+        ipc.on('delete-stock', (event, code) => {
+          this.deleteStock(code)
+        })
+      },
+      // 点击跳转雪球网站
+      openInXueQiu (code) {
+        let marketPrefix = code.substring(0, 2).toLowerCase()
+        shell.openExternal('https://xueqiu.com/S/' + (marketPrefix === 'hk' ? code.substring(2) : code))
+      },
+      // 点击跳转东方财富网站
+      openInGuBa (code) {
+        let marketPrefix = code.substring(0, 2).toLowerCase()
+        shell.openExternal('http://guba.eastmoney.com/list,' + (marketPrefix === 'hk' ? code : (code === 'sh000001' ? 'szzs' : code.substring(2))) + '.html')
       }
     }
   }

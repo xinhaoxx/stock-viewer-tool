@@ -1,6 +1,6 @@
 'use strict'
 
-import {app, BrowserWindow, ipcMain, Menu, Tray, globalShortcut} from 'electron'
+import {app, BrowserWindow, ipcMain, Menu, MenuItem, Tray, globalShortcut} from 'electron'
 import path from 'path'
 
 /**
@@ -108,7 +108,7 @@ const registerIPC = function () {
     let pos = mainWindow.getPosition()
     if (pos[1] < 0) {
       isAnimating = true
-      for (let i = pos[1]; i <= 0; i++) {
+      for (let i = pos[1]; i <= 0; i += 2) {
         mainWindow.setPosition(pos[0], i)
       }
       isAnimating = false
@@ -121,11 +121,39 @@ const registerIPC = function () {
       timeout = setTimeout(() => {
         isAnimating = true
         const height = mainWindow.getSize()[1]
-        for (let i = 0; i > (-1 * height + 10); i--) {
+        for (let i = 0; i > (-1 * height + 10); i -= 2) {
           mainWindow.setPosition(pos[0], i)
         }
         isAnimating = false
       }, 1000)
     }
+  })
+
+  // 右键菜单
+  ipcMain.on('rightClick', (event, code) => {
+    const menu = new Menu()
+    menu.append(new MenuItem({
+      label: '在雪球中查看',
+      click: () => {
+        event.sender.send('show-xueqiu', code)
+      }
+    }))
+    menu.append(new MenuItem({
+      label: '在股吧中查看',
+      click: () => {
+        event.sender.send('show-guba', code)
+      }
+    }))
+    const stocksIndex = ['sh000001', 'sz399001', 'sz399006']
+    if (stocksIndex.indexOf(code.toLowerCase()) === -1) {
+      menu.append(new MenuItem({type: 'separator'}))
+      menu.append(new MenuItem({
+        label: '删除自选',
+        click: () => {
+          event.sender.send('delete-stock', code)
+        }
+      }))
+    }
+    menu.popup(mainWindow)
   })
 }
