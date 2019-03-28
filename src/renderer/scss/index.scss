@@ -1,5 +1,5 @@
-$--gain-more-color: #F84B4B;
-$--gain-less-color: #45AF26;
+$--gain-more-color: #ff5d5d;
+$--gain-less-color: #63b74b;
 * {
     box-sizing: border-box;
     margin: 0;
@@ -12,22 +12,23 @@ $--gain-less-color: #45AF26;
 
 body {
     font-family: PingFang SC, 'Source Sans Pro', sans-serif;
-    padding: 2px;
+    //padding: 2px;
     background: rgba(0, 0, 0, 0);
+    overflow: hidden;
 }
 
 #box {
     width: 100%;
     border-radius: 2px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .3);
 
     > .header {
         display: flex;
-        border-bottom: 1px solid #eee;
         justify-content: space-between;
-        background-color: #f8f8f8;
+        background-color: #fff;
         $--header-height: 35px;
+        padding-top: 3px;
 
         > h1 {
             padding: 0 12px;
@@ -46,7 +47,7 @@ body {
                 display: block;
                 height: 14px;
                 line-height: 14px;
-                width: 25px;
+                width: 30px;
                 text-align: center;
                 cursor: pointer;
                 color: #888;
@@ -60,8 +61,8 @@ body {
                 }
 
                 &.button-min {
-                    margin-left: 5px;
-                    padding-left: 5px;
+                    margin-left: 8px;
+                    padding-left: 8px;
                     border-left: 1px solid #e0e0e0;
                 }
 
@@ -76,50 +77,72 @@ body {
 
     > .stock-index {
         display: flex;
+        justify-content: space-between;
         border-bottom: 1px solid #eee;
         background-color: #fff;
+        padding: 10px 10px 20px 10px;
 
         > div {
-            width: 33.333%;
+            width: 32%;
             font-size: 13px;
             box-sizing: border-box;
-            padding: 10px 0 10px 12px;
-            margin: 10px 0;
+            padding: 8px 5px;
+            background-color: #aaa;
+            border-radius: 2px;
+            transition: all .1s linear;
+
+            &.gain-more {
+                background-color: $--gain-more-color;
+
+                &:hover {
+                    background-color: darken($--gain-more-color, 5%);
+                }
+            }
+
+            &.gain-less {
+                background-color: $--gain-less-color;
+
+                &:hover {
+                    background-color: darken($--gain-less-color, 5%);
+                }
+            }
 
 
             > .upper-info {
-                display: flex;
                 align-items: baseline;
                 font-weight: bold;
+                color: #fff;
+                text-align: center;
 
                 > h3 {
                     font-size: 13px;
+                    font-style: normal;
                 }
 
                 > p {
-                    margin-left: 10px;
+                    font-size: 16px;
                 }
             }
 
             > .index-gain {
-                &.gain-more {
-                    color: $--gain-more-color;
-                }
-
-                &.gain-less {
-                    color: $--gain-less-color;
-                }
+                display: flex;
+                justify-content: space-between;
+                font-size: 11px;
+                color: #fff;
             }
-        }
-
-        div + div {
-            border-left: 1px solid #eee;
         }
     }
 
-
     .optional-stock-table {
         overflow: hidden;
+
+        &:before {
+            display: none !important;
+        }
+
+        .caret-wrapper {
+            width: 18px !important;
+        }
 
         .stock-info {
             > h3 {
@@ -138,18 +161,15 @@ body {
         }
 
         .stock-price {
-            width: 50px;
             font-weight: bold;
         }
 
         .stock-volume {
-            width: 70px;
             font-weight: bold;
         }
 
         .gain-price {
-            padding-right: 10px;
-            color: #000;
+            color: #888;
             font-weight: bold;
 
             &.gain-more {
@@ -182,6 +202,8 @@ body {
     }
 }
 
+/* scrollbar's style
+-------------------------- */
 $--scroll-bar-color: #333;
 ::selection {
     background: #ddd;
@@ -219,4 +241,30 @@ $--scroll-bar-color: #333;
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* 弹窗样式
+---------------------*/
+.el-dialog__wrapper {
+    top: 50px;
+    left: 10px;
+    bottom: 10px;
+    right: 10px;
+
+    > .el-dialog {
+        margin-top: 0 !important;
+        width: 380px !important;
+        border-radius: 0;
+        box-shadow: none !important;
+    }
+}
+
+.v-modal {
+    top: 50px;
+    left: 10px;
+    bottom: 10px;
+    right: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 60px);
 }

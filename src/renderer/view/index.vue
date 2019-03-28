@@ -1,5 +1,5 @@
 <template>
-  <div id="box" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
+  <div id="box">
     <!--顶栏部分-->
     <div class="header">
       <h1>自选小工具</h1>
@@ -17,25 +17,26 @@
     </div>
     <!--指数部分-->
     <div class="stock-index">
-      <div v-for="(item,index) in indexs" :key="index" @contextmenu="showContext(item)">
+      <div v-for="(item,index) in indexs"
+           :key="index"
+           @contextmenu="showContext(item)"
+           :class="{'gain-more':item.gain.percent>0,'gain-less':item.gain.percent<0}">
         <div class="upper-info">
           <h3>{{item.name}}</h3>
           <p>{{item.price}}</p>
         </div>
-        <p class="index-gain"
-           :class="{'gain-more':item.gain.percent>0,'gain-less':item.gain.percent<0}">
-          {{item.gain.price>0?'+':''}}{{item.gain.price}}
-          ({{item.gain.percent>0?'+':''}}{{item.gain.percent}}%)
+        <p class="index-gain">
+          <span>{{item.gain.price>0?'+':''}}{{item.gain.price}}</span>
+          <span>{{item.gain.percent>0?'+':''}}{{item.gain.percent}}%</span>
         </p>
       </div>
     </div>
     <!--自选部分-->
     <div class="table-container">
       <el-table class="optional-stock-table" :data="optionals"
-                height="310" size="small" :header-cell-style="{padding:0}"
+                height="500" size="small" :header-cell-style="{padding:0}"
                 @row-contextmenu="showContext">
-        <el-table-column
-                label="股票">
+        <el-table-column label="股票" width="90">
           <template slot-scope="props">
             <div class="stock-info">
               <h3>{{props.row.name}}</h3>
@@ -43,27 +44,29 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="最新价" align="right">
+        <el-table-column label="最新价" align="right" width="60">
           <template slot-scope="props">
             <p class="stock-price">{{props.row.price}}</p>
           </template>
         </el-table-column>
-        <el-table-column label="成交量" align="right">
+        <el-table-column label="成交量" align="right" width="90">
           <template slot-scope="props">
-            <p class="stock-volume">{{transVolume(props.row.volume)}}{{props.row.code.indexOf('hk')>-1 ?
-              '万股':(props.row.volume.length > 4 ? '万手':'手')}}</p>
+            <p class="stock-volume">
+              {{transVolume(props.row.volume)}}{{props.row.code.indexOf('hk')>-1 ?
+              '万股':(props.row.volume.length > 4 ? '万手':'手')}}
+            </p>
           </template>
         </el-table-column>
-        <el-table-column prop="gain.price" label="涨跌价" align="right" sortable>
+        <el-table-column prop="gain.percent" label="涨跌幅" align="right" sortable>
           <template slot-scope="props">
             <span class="gain-price"
-                  :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">{{props.row.gain.price>0?'+':''}}{{props.row.gain.price}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="gain.percent" label="涨跌幅" align="right" width="85" sortable>
-          <template slot-scope="props">
+                  :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">
+              {{props.row.gain.price>0?'+':''}}{{props.row.gain.price}}
+            </span>
             <span class="gain-percent"
-                  :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">{{props.row.gain.percent>0?'+':''}}{{props.row.gain.percent}}%</span>
+                  :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">
+              {{props.row.gain.percent>0?'+':''}}{{props.row.gain.percent}}%
+            </span>
           </template>
         </el-table-column>
       </el-table>
@@ -167,6 +170,7 @@
       addOptional () {
         this.$refs['optionalDialog'].show()
       },
+      // 显示右键菜单
       showContext (row) {
         ipc.send('rightClick', row.code)
       },
@@ -195,14 +199,7 @@
         })
         ipc.send('update', content.join('\n'))
       },
-      // 鼠标进入
-      mouseEnter () {
-        ipc.send('mouseenter')
-      },
-      // 鼠标移出
-      mouseLeave () {
-        ipc.send('mouseleave')
-      },
+
       // 将金额转为万为单位
       transVolume (number) {
         number = parseInt(number) + ''

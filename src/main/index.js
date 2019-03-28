@@ -26,8 +26,8 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     useContentSize: true,
-    width: 420,
-    height: 435,
+    width: 400,
+    height: 663,
     frame: false,
     transparent: true,
     alwaysOnTop: true,
@@ -106,9 +106,9 @@ const registerIPC = function () {
     clearTimeout(timeout)
     if (isAnimating) return false
     let pos = mainWindow.getPosition()
-    if (pos[1] < 0) {
+    if (pos[1] < -10) {
       isAnimating = true
-      for (let i = pos[1]; i <= 0; i += 2) {
+      for (let i = pos[1]; i <= -10; i += 2) {
         mainWindow.setPosition(pos[0], i)
       }
       isAnimating = false
@@ -117,11 +117,11 @@ const registerIPC = function () {
   ipcMain.on('mouseleave', () => {
     if (isAnimating) return false
     let pos = mainWindow.getPosition()
-    if (pos[1] <= 0) {
+    if (pos[1] <= -10) {
       timeout = setTimeout(() => {
         isAnimating = true
-        const height = mainWindow.getSize()[1]
-        for (let i = 0; i > (-1 * height + 10); i -= 2) {
+        const height = mainWindow.getSize()[1] - 10
+        for (let i = -10; i > (-1 * height + 1); i -= 2) {
           mainWindow.setPosition(pos[0], i)
         }
         isAnimating = false
