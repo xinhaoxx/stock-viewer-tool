@@ -1,7 +1,7 @@
 {
   "name": "stockviewertool",
   "productName": "stockviewertool",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "author": "",
   "description": "基于 Electron + Vue 的实时股价查看器（工具）",
   "license": null,
@@ -68,6 +68,7 @@
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "0.4.0",
+    "mousetrap": "^1.6.3",
     "multispinner": "^0.2.1",
     "node-loader": "^0.6.0",
     "node-sass": "^4.9.2",

@@ -3,10 +3,9 @@
 > 基于 Electron + Vue 的实时股价查看器（工具）
 
 #### 图片预览
-![1.png](https://i.loli.net/2019/03/27/5c9b1465873dd.png)
-![2.png](https://i.loli.net/2019/03/27/5c9b1465850cf.png)
-![3.png](https://i.loli.net/2019/03/27/5c9b146590301.png)
-![4.png](https://i.loli.net/2019/03/27/5c9b146585867.png)
+![1.png](https://i.loli.net/2019/03/28/5c9c7c6f6d88a.png)
+![2.png](https://i.loli.net/2019/03/28/5c9c7c6f7829a.png)
+![4.png](https://i.loli.net/2019/03/28/5c9c7c6f74a04.png)
 
 #### Build Setup
 
@@ -25,7 +24,7 @@ npm run lint
 
 ```
 
-#### Features
+#### 特点
 ````
 1.接口使用的是腾讯股票接口
 
@@ -36,4 +35,15 @@ npm run lint
 4.支持置顶窗口
 
 5.支持放置在屏幕顶端，能够自动缩起（类似QQ）
+
+6.映射数字键盘，支持直接输入股票代码添加自选
+````
+
+#### 待开发
+````
+1.股票当前详情
+
+2.实时K线图显示
+
+3.等等其他功能...
 ````

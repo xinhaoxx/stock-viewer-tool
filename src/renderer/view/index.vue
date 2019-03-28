@@ -33,8 +33,11 @@
     </div>
     <!--自选部分-->
     <div class="table-container">
-      <el-table class="optional-stock-table" :data="optionals"
-                height="500" size="small" :header-cell-style="{padding:0}"
+      <el-table class="optional-stock-table"
+                height="500"
+                size="small"
+                :data="optionals"
+                :header-cell-style="{padding:0}"
                 @row-contextmenu="showContext">
         <el-table-column label="股票" width="100">
           <template slot-scope="props">
@@ -94,6 +97,8 @@
   const ipc = window.require('electron').ipcRenderer
   const drag = require('electron-drag')
 
+  const Mousetrap = require('mousetrap')
+
   const stocksIndex = ['sh000001', 'sz399001', 'sz399006'] // 指数
 
   const apiUrl = 'http://qt.gtimg.cn/' // 接口地址
@@ -113,6 +118,9 @@
       setInterval(this.fetchData, 1000)
       // 使用 electron-drag 解决顶栏无法捕获鼠标事件的问题（暂不支持linux）
       drag('.header')
+      Mousetrap.bind(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], (e) => {
+        this.$refs['optionalDialog'].show(e.key)
+      })
       // 如果不支持则使用样式的方式
       if (!drag.supported) {
         document.querySelector('.header').style['-webkit-app-region'] = 'drag'

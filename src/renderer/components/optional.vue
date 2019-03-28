@@ -4,15 +4,15 @@
              :show-close="false"
              center
              class="optional-dialog">
-    <el-form :model="form" :rules="rules" ref="form">
+    <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
       <el-form-item prop="code" style="width:100%;">
         <el-input v-model="form.code"
+                  id="codeInput"
                   ref="codeInput"
                   placeholder="请输入股票代码"
                   style="width:100%;"
                   maxlength="6"
-                  autofocus="true"
-                  @keyup.enter.native="validate">
+                  @keyup.native="handleInput">
         </el-input>
       </el-form-item>
     </el-form>
@@ -43,10 +43,17 @@
         }
       }
     },
+    mounted () {
+    },
     methods: {
       // 显示
-      show () {
+      show (number = null) {
         this.isVisible = !this.isVisible
+        setTimeout(() => {
+          this.$refs['form'].resetFields()
+          this.form.code = number
+          this.$refs['codeInput'].focus()
+        }, 1)
       },
       // 验证表单
       validate () {
@@ -94,6 +101,14 @@
         } else {
           return 'HK'
         }
+      },
+      // 过滤输入内容和映射键位
+      handleInput (ev) {
+        if (ev.keyCode === 13) {
+          this.validate()
+        } else {
+          this.form.code = ev.target.value.replace(/[^\d]/g, '')
+        }
       }
     }
   }
@@ -110,8 +125,17 @@
     }
 
     .el-dialog__body {
+      padding-bottom: 15px !important;
+
       .el-form-item__error {
         width: 100%;
+      }
+
+      #codeInput {
+        font-size: 25px;
+        border: none;
+        border-bottom: 1px solid #eee;
+        letter-spacing: 2px;
       }
     }
 

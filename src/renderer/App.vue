@@ -11,7 +11,6 @@
     methods: {
       // 鼠标进入
       mouseEnter () {
-        console.log('mouse enter')
         ipc.send('mouseenter')
       },
       // 鼠标移出
