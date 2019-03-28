@@ -119,6 +119,7 @@ body {
                     font-style: normal;
                 }
 
+
                 > p {
                     font-size: 16px;
                 }
@@ -145,13 +146,31 @@ body {
         }
 
         .stock-info {
-            > h3 {
+            > div {
+                display: flex;
+                align-items: center;
                 padding-top: 4px;
                 margin-bottom: 5px;
-                font-size: 14px;
-                line-height: 14px;
-                color: #000;
+
+                > h3 {
+                    font-size: 14px;
+                    line-height: 14px;
+                    color: #000;
+                }
+
+                > span {
+                    display: block;
+                    margin-left: 3px;
+                    padding: 0 2px;
+                    background-color: #aaa;
+                    border-radius: 2px;
+                    line-height: 14px;
+                    font-size: 11px;
+                    color: #fff;
+                }
+
             }
+
 
             > p {
                 font-size: 11px;

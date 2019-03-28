@@ -26,7 +26,7 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     useContentSize: true,
-    width: 400,
+    width: 415,
     height: 663,
     frame: false,
     transparent: true,
@@ -125,7 +125,7 @@ const registerIPC = function () {
           mainWindow.setPosition(pos[0], i)
         }
         isAnimating = false
-      }, 1000)
+      }, 300)
     }
   })
 

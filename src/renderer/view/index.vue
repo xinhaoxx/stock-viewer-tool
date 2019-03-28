@@ -36,10 +36,15 @@
       <el-table class="optional-stock-table" :data="optionals"
                 height="500" size="small" :header-cell-style="{padding:0}"
                 @row-contextmenu="showContext">
-        <el-table-column label="股票" width="90">
+        <el-table-column label="股票" width="100">
           <template slot-scope="props">
             <div class="stock-info">
-              <h3>{{props.row.name}}</h3>
+              <div>
+                <h3>{{props.row.name}}</h3>
+                <span v-if="props.row.status">
+                  {{props.row.status==='S'?'停':'退'}}
+                </span>
+              </div>
               <p>{{props.row.code.toUpperCase()}}</p>
             </div>
           </template>
@@ -59,14 +64,20 @@
         </el-table-column>
         <el-table-column prop="gain.percent" label="涨跌幅" align="right" sortable>
           <template slot-scope="props">
+            <template v-if="!props.row.status">
             <span class="gain-price"
                   :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">
               {{props.row.gain.price>0?'+':''}}{{props.row.gain.price}}
             </span>
-            <span class="gain-percent"
-                  :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">
+              <span class="gain-percent"
+                    :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">
               {{props.row.gain.percent>0?'+':''}}{{props.row.gain.percent}}%
             </span>
+            </template>
+            <template v-else>
+              <span class="gain-price">-</span>
+              <span class="gain-percent">0.00%</span>
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -147,7 +158,8 @@
               price: content[4],
               percent: content[5]
             },
-            volume: content[6]
+            volume: content[6],
+            status: content[8] === '' ? null : content[8]
           }
           if (index < stocksIndex.length) {
             this.indexs.push(stock)
