@@ -4,14 +4,14 @@
              :show-close="false"
              center
              class="optional-dialog">
-    <h3>请输入股票代码</h3>
     <el-form :model="form" :rules="rules" ref="form">
       <el-form-item prop="code" style="width:100%;">
         <el-input v-model="form.code"
+                  ref="codeInput"
                   placeholder="请输入股票代码"
-                  size="small"
                   style="width:100%;"
                   maxlength="6"
+                  autofocus="true"
                   @keyup.enter.native="validate">
         </el-input>
       </el-form-item>
@@ -46,7 +46,7 @@
     methods: {
       // 显示
       show () {
-        this.isVisible = true
+        this.isVisible = !this.isVisible
       },
       // 验证表单
       validate () {
@@ -110,14 +110,7 @@
     }
 
     .el-dialog__body {
-      padding-bottom: 25px;
-
-      h3 {
-        margin-bottom: 10px;
-        font-size: 14px;
-        text-align: center;
-      }
-      .el-form-item__error{
+      .el-form-item__error {
         width: 100%;
       }
     }
