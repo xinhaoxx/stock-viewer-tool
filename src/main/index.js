@@ -10,6 +10,8 @@ import path from 'path'
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
+// 关闭安全警告
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
@@ -25,6 +27,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
+    webPreferences: {webSecurity: false},
     useContentSize: true,
     width: 415,
     height: 663,
