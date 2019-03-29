@@ -53,7 +53,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="最新价" align="right" width="60">
+        <el-table-column prop="price" label="最新价" align="right" width="75" sortable>
           <template slot-scope="props">
             <p class="stock-price">{{props.row.price}}</p>
           </template>
@@ -120,11 +120,11 @@
       setInterval(this.fetchData, 1000)
       // 拖拽功能
       this.rowDrop()
-      // 使用 electron-drag 解决顶栏无法捕获鼠标事件的问题（暂不支持linux）
-      drag('.header')
       Mousetrap.bind(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], (e) => {
         this.$refs['optionalDialog'].show(e.key)
       })
+      // 使用 electron-drag 解决顶栏无法捕获鼠标事件的问题（暂不支持linux）
+      drag('.header')
       // 如果不支持则使用样式的方式
       if (!drag.supported) {
         document.querySelector('.header').style['-webkit-app-region'] = 'drag'
@@ -165,10 +165,10 @@
           let stock = {
             code: prefix.substring(4, 12),
             name: content[1],
-            price: content[3],
+            price: parseFloat(content[3]),
             gain: {
-              price: content[4],
-              percent: content[5]
+              price: parseFloat(content[4]),
+              percent: parseFloat(content[5])
             },
             volume: content[6],
             status: content[8] === '' ? null : content[8]
