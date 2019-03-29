@@ -36,6 +36,7 @@
       <el-table class="optional-stock-table"
                 height="500"
                 size="small"
+                row-key="code"
                 :data="optionals"
                 :header-cell-style="{padding:0}"
                 @row-contextmenu="showContext">
@@ -92,6 +93,7 @@
 
 <script>
   import OptionalDialog from '../components/optional'
+  import Sortable from 'sortablejs'
 
   const shell = require('electron').shell
   const ipc = window.require('electron').ipcRenderer
@@ -116,6 +118,8 @@
     mounted () {
       // 轮训获取数据
       setInterval(this.fetchData, 1000)
+      // 拖拽功能
+      this.rowDrop()
       // 使用 electron-drag 解决顶栏无法捕获鼠标事件的问题（暂不支持linux）
       drag('.header')
       Mousetrap.bind(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], (e) => {
@@ -252,6 +256,24 @@
       openInGuBa (code) {
         let marketPrefix = code.substring(0, 2).toLowerCase()
         shell.openExternal('http://guba.eastmoney.com/list,' + (marketPrefix === 'hk' ? code : (code === 'sh000001' ? 'szzs' : code.substring(2))) + '.html')
+      },
+      // 行拖拽
+      rowDrop () {
+        const tbody = document.querySelector('.el-table__body-wrapper tbody')
+        const _this = this
+        Sortable.create(tbody, {
+          animation: 120,
+          onEnd ({newIndex, oldIndex}) {
+            const currRow = _this.optionals.splice(oldIndex, 1)[0]
+            _this.optionals.splice(newIndex, 0, currRow)
+            _this.modifyData()
+          }
+        })
+      },
+      // 修改数据
+      modifyData () {
+        const modified = this.optionals.map((item) => item.code)
+        localStorage.setItem('optionals', modified.join(','))
       }
     }
   }
