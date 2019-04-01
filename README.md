@@ -1,59 +1,48 @@
-# stock-viewer-tool
+> 一款基于 electron + vue + element-ui 的实时股票股价浏览工具  
+> 目前在 windows 上运行良好，除了部分已知问题  
 
-> 基于 Electron + Vue 的实时股价查看器（工具）  
-> 开发框架 [Electron-Vue](https://github.com/SimulatedGREG/electron-vue)  
-> UI框架 [Element-ui](https://github.com/ElemeFE/element)
+> 如果只需要查看实时股价的话，那么这工具应该比较适合你  
+> 相比在各大网站或者股票软件或者app，查看效率会比较高
+  
+> 如果感兴趣或者能对你有所帮助的话，可以点一下 star :)
 
-#### 图片预览
-![1.png](https://i.loli.net/2019/03/28/5c9c7c6f6d88a.png)
-![2.png](https://i.loli.net/2019/03/28/5c9c7c6f7829a.png)
-![4.png](https://i.loli.net/2019/03/28/5c9c7c6f74a04.png)
+## 功能特点
+- 支持沪深港
+- 支持窗口贴顶自动缩起（类似QQ）
+- 映射数字+英文键，无需点击添加按钮即可快捷添加自选
+- 支持自选行拖拽排序功能
+- 右键点击个股可快速前往雪球或股吧查看个股
 
 
-#### 特点
-````
-1.接口使用的是腾讯股票接口
+## 程序预览
+![](./screenshot/app.gif)
 
-2.右键菜单可选择查看详情（雪球或股吧）
+## 下载使用
+> 已经发布到了 Release 中，下载后打开即可使用
 
-3.支持深沪港
+## 技术栈及依赖
+- electron(electron-vue)
+- vue
+- element-ui
+- sortable-js
+- mousetrap
 
-4.支持置顶窗口
+## 开发中
+- 股票详情
+- 实时K线图
+- 其他功能...
 
-5.支持放置在屏幕顶端，能够自动缩起（类似QQ）
+## 已知 BUG
+- Windows下如果调整了显示倍率（>=125%）的情况，那么拖拽顶栏时会出现无限增加宽度的问题
 
-6.映射键盘，支持直接输入股票代码/名称/缩写的方式添加自选
-
-7.支持拖拽排序
-````
-
-#### 待开发
-````
-1.股票当前详情
-
-2.实时K线图显示
-
-3.等等其他功能...
-````
-
-#### 已知问题
-````
-1.windows下如果调整了屏幕显示百分比，拖拽顶栏的时候，会出现自动增加宽度的问题。（貌似是 Electron 这边的问题，待解决）
-````
-
-#### Build Setup
-
-``` bash
-# install dependencies
+## 启动构建
+````bash 
+# 安装项目依赖
 npm install
 
-# serve with hot reload at localhost:9080
+# 启动项目
 npm run dev
 
-# build electron application for production
+# 构建项目
 npm run build
-
-# lint all JS/Vue component files in `src/`
-npm run lint
-
-```
+````
