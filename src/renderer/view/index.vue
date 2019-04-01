@@ -43,7 +43,7 @@
         <el-table-column label="股票" width="100">
           <template slot-scope="props">
             <div class="stock-info">
-              <div>
+              <div :title="props.row.name">
                 <h3>{{props.row.name}}</h3>
                 <span v-if="props.row.status">
                   {{props.row.status==='S'?'停':'退'}}
@@ -86,7 +86,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <optional-dialog ref="optionalDialog"/>
+    <optional-dialog ref="optionalDialog" @finish="fetchData"/>
   </div>
 </template>
 
@@ -115,12 +115,15 @@
         optionals: []
       }
     },
+    created () {
+      this.fetchData()
+    },
     mounted () {
       // 轮训获取数据
-      setInterval(this.fetchData, 1000)
+      setInterval(this.fetchData, 5000)
       // 拖拽功能
       this.rowDrop()
-      Mousetrap.bind(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], (e) => {
+      Mousetrap.bind(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'], (e) => {
         this.$refs['optionalDialog'].show(e.key)
       })
       // 使用 electron-drag 解决顶栏无法捕获鼠标事件的问题（暂不支持linux）
@@ -165,10 +168,10 @@
           let stock = {
             code: prefix.substring(4, 12),
             name: content[1],
-            price: parseFloat(content[3]),
+            price: parseFloat(content[3]).toFixed(2),
             gain: {
-              price: parseFloat(content[4]),
-              percent: parseFloat(content[5])
+              price: parseFloat(content[4]).toFixed(2),
+              percent: parseFloat(content[5]).toFixed(2)
             },
             volume: content[6],
             status: content[8] === '' ? null : content[8]
@@ -209,7 +212,7 @@
           }
         })
         localStorage.setItem('optionals', final.join(','))
-
+        this.fetchData()
         this.$toasted.show('已删除', {
           theme: 'toasted-primary',
           position: 'bottom-center',
@@ -242,6 +245,15 @@
         })
         ipc.on('show-guba', (event, code) => {
           this.openInGuBa(code)
+        })
+        ipc.on('place-top', (event, code) => {
+          let storage = localStorage.getItem('optionals')
+          let storageOptional = storage.split(',')
+          if (storageOptional.indexOf(code) > -1) {
+            storageOptional.splice(storageOptional.indexOf(code), 1)
+          }
+          localStorage.setItem('optionals', code + ',' + storageOptional.join(','))
+          this.fetchData()
         })
         ipc.on('delete-stock', (event, code) => {
           this.deleteStock(code)
@@ -280,5 +292,5 @@
 </script>
 
 <style lang="scss">
-  @import '../scss/index.scss';
+  @import '../scss/index';
 </style>

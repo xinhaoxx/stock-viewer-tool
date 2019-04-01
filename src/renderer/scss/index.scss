@@ -153,9 +153,15 @@ body {
                 margin-bottom: 5px;
 
                 > h3 {
+                    display: inline-block;
                     font-size: 14px;
                     line-height: 14px;
                     color: #000;
+                    height: 14px;
+                    max-width: 70px;
+                    white-space:nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
 
                 > span {
@@ -273,7 +279,7 @@ $--scroll-bar-color: #333;
 
     > .el-dialog {
         margin-top: 0 !important;
-        width: 395px !important;
+        width: 400px !important;
         border-radius: 0;
         box-shadow: none !important;
     }
