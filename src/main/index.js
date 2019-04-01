@@ -148,14 +148,16 @@ const registerIPC = function () {
         event.sender.send('show-guba', code)
       }
     }))
-    menu.append(new MenuItem({
-      label: '快速置顶',
-      click: () => {
-        event.sender.send('place-top', code)
-      }
-    }))
+
     const stocksIndex = ['sh000001', 'sz399001', 'sz399006']
     if (stocksIndex.indexOf(code.toLowerCase()) === -1) {
+      menu.append(new MenuItem({type: 'separator'}))
+      menu.append(new MenuItem({
+        label: '快速置顶',
+        click: () => {
+          event.sender.send('place-top', code)
+        }
+      }))
       menu.append(new MenuItem({type: 'separator'}))
       menu.append(new MenuItem({
         label: '删除自选',
@@ -165,5 +167,9 @@ const registerIPC = function () {
       }))
     }
     menu.popup(mainWindow)
+  })
+
+  ipcMain.on('open-devtools', (event, arg) => {
+    mainWindow.openDevTools()
   })
 }
