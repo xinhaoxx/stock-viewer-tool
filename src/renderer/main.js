@@ -20,6 +20,7 @@ Vue.use(Button)
 Vue.use(Toasted)
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
+axios.defaults.headers.get['Content-Type'] = 'text/plain'
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
