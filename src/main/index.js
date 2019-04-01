@@ -29,7 +29,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     webPreferences: {webSecurity: false},
     useContentSize: true,
-    width: 415,
+    width: 420,
     height: 663,
     frame: false,
     transparent: true,
@@ -115,6 +115,7 @@ const registerIPC = function () {
         mainWindow.setPosition(pos[0], i)
       }
       isAnimating = false
+      mainWindow.focus()
     }
   })
   ipcMain.on('mouseleave', () => {
@@ -145,6 +146,12 @@ const registerIPC = function () {
       label: '在股吧中查看',
       click: () => {
         event.sender.send('show-guba', code)
+      }
+    }))
+    menu.append(new MenuItem({
+      label: '快速置顶',
+      click: () => {
+        event.sender.send('place-top', code)
       }
     }))
     const stocksIndex = ['sh000001', 'sz399001', 'sz399006']
