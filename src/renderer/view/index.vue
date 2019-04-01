@@ -55,7 +55,7 @@
         </el-table-column>
         <el-table-column prop="price" label="最新价" align="right" width="75" sortable>
           <template slot-scope="props">
-            <p class="stock-price">{{props.row.price}}</p>
+            <p class="stock-price">{{props.row.price.toFixed(2)}}</p>
           </template>
         </el-table-column>
         <el-table-column label="成交量" align="right" width="90">
@@ -71,11 +71,11 @@
             <template v-if="!props.row.status">
             <span class="gain-price"
                   :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">
-              {{props.row.gain.price>0?'+':''}}{{props.row.gain.price}}
+              {{props.row.gain.price>0?'+':''}}{{props.row.gain.price.toFixed(2)}}
             </span>
               <span class="gain-percent"
                     :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">
-              {{props.row.gain.percent>0?'+':''}}{{props.row.gain.percent}}%
+              {{props.row.gain.percent>0?'+':''}}{{props.row.gain.percent.toFixed(2)}}%
             </span>
             </template>
             <template v-else>
@@ -126,6 +126,9 @@
       Mousetrap.bind(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'], (e) => {
         this.$refs['optionalDialog'].show(e.key)
       })
+      Mousetrap.bind(['command+k', 'ctrl+k'], function () {
+        ipc.send('open-devtools')
+      })
       // 使用 electron-drag 解决顶栏无法捕获鼠标事件的问题（暂不支持linux）
       drag('.header')
       // 如果不支持则使用样式的方式
@@ -168,10 +171,10 @@
           let stock = {
             code: prefix.substring(4, 12),
             name: content[1],
-            price: parseFloat(content[3]).toFixed(2),
+            price: parseFloat(content[3]),
             gain: {
-              price: parseFloat(content[4]).toFixed(2),
-              percent: parseFloat(content[5]).toFixed(2)
+              price: parseFloat(content[4]),
+              percent: parseFloat(content[5])
             },
             volume: content[6],
             status: content[8] === '' ? null : content[8]
