@@ -23,11 +23,11 @@
            :class="{'gain-more':item.gain.percent>0,'gain-less':item.gain.percent<0}">
         <div class="upper-info">
           <h3>{{item.name}}</h3>
-          <p>{{item.price}}</p>
+          <p>{{item.price.toFixed(2)}}</p>
         </div>
         <p class="index-gain">
-          <span>{{item.gain.price>0?'+':''}}{{item.gain.price}}</span>
-          <span>{{item.gain.percent>0?'+':''}}{{item.gain.percent}}%</span>
+          <span>{{item.gain.price>0?'+':''}}{{item.gain.price.toFixed(2)}}</span>
+          <span>{{item.gain.percent>0?'+':''}}{{item.gain.percent.toFixed(2)}}%</span>
         </p>
       </div>
     </div>
@@ -39,7 +39,8 @@
                 row-key="code"
                 :data="optionals"
                 :header-cell-style="{padding:0}"
-                @row-contextmenu="showContext">
+                @row-contextmenu="showContext"
+                @row-dblclick="showDetail">
         <el-table-column label="股票" width="100">
           <template slot-scope="props">
             <div class="stock-info">
@@ -90,16 +91,15 @@
   </div>
 </template>
 
-
 <script>
-  import OptionalDialog from '../components/optional'
-  import Sortable from 'sortablejs'
+  import Sortable from 'sortablejs' // 拖拽库
+  import OptionalDialog from '../components/optional' // 添加功能组件
+
+  const drag = require('electron-drag') // 窗体移动库
+  const Mousetrap = require('mousetrap') // 键位映射库
 
   const shell = require('electron').shell
   const ipc = window.require('electron').ipcRenderer
-  const drag = require('electron-drag')
-
-  const Mousetrap = require('mousetrap')
 
   const stocksIndex = ['sh000001', 'sz399001', 'sz399006'] // 指数
 
@@ -137,8 +137,15 @@
       }
 
       this.initIpcListener()
+
+      // 单独为页面做事件监听可以防止出现部分处于 body 中的 element ui 元素监听不到的问题
+      document.addEventListener('mouseenter', this.mouseEnter)
+      document.addEventListener('mouseleave', this.mouseLeave)
     },
     methods: {
+      showDetail () {
+        ipc.send('create')
+      },
       // 获取自选股数据
       fetchData () {
         let index = stocksIndex.map(item => 's_' + item) // 接口需要加前缀
@@ -190,11 +197,11 @@
 
       // 关闭窗口
       setWinClose () {
-        ipc.send('close')
+        ipc.send('main-window-close')
       },
       // 最小化窗口
       setWinMin () {
-        ipc.send('minimize')
+        ipc.send('main-window-min')
       },
       // 添加自选
       addOptional () {
@@ -202,7 +209,7 @@
       },
       // 显示右键菜单
       showContext (row) {
-        ipc.send('rightClick', row.code)
+        ipc.send('main-right-click', row.code)
       },
       // 删除自选
       deleteStock (code) {
@@ -227,7 +234,7 @@
         let content = data.map(item => {
           return `${item.name}：当前价 ¥${item.price},涨跌 ¥${item.gain.price}（${item.gain.percent}%）`
         })
-        ipc.send('update', content.join('\n'))
+        ipc.send('main-tray-update', content.join('\n'))
       },
 
       // 将金额转为万为单位
@@ -289,6 +296,14 @@
       modifyData () {
         const modified = this.optionals.map((item) => item.code)
         localStorage.setItem('optionals', modified.join(','))
+      },
+      // 鼠标进入
+      mouseEnter () {
+        ipc.send('main-mouse-enter')
+      },
+      // 鼠标移出
+      mouseLeave () {
+        ipc.send('main-mouse-leave')
       }
     }
   }
