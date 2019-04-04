@@ -1,0 +1,164 @@
+$--gain-more-color: #ff5d5d; // 红色
+$--gain-less-color: #63b74b; // 绿色
+
+.stock-window {
+    width: 100%;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .3);
+    background-color: #fff;
+
+
+    > .window-content {
+
+        > .stock-top {
+            display: flex;
+            align-items: start;
+            padding: 15px 10px 0 15px;
+            -webkit-app-region: drag;
+
+            > .stock-name {
+                font-size: 18px;
+            }
+
+            > .stock-code {
+                flex: 1;
+                margin-left: 5px;
+                font-size: 18px;
+                font-weight: normal;
+                color: #888;
+            }
+
+
+            > .action-buttons {
+                position: relative;
+                z-index: 9999999;
+                display: flex;
+                align-items: center;
+                padding-right: 5px;
+                -webkit-app-region: no-drag; // 按钮不可拖拽
+
+
+                > a {
+                    display: block;
+                    height: 14px;
+                    line-height: 14px;
+                    width: 30px;
+                    text-align: center;
+                    cursor: pointer;
+                    color: #888;
+
+                    > i {
+                        font-size: 14px;
+                    }
+
+                    &:hover {
+                        color: #000;
+                    }
+
+                    &.button-min {
+                        margin-left: 8px;
+                        padding-left: 8px;
+                        border-left: 1px solid #e0e0e0;
+                    }
+
+                    &.button-close {
+                        &:hover {
+                            color: #F84B4B;
+                        }
+                    }
+                }
+            }
+        }
+
+        > .price-row {
+            padding: 10px 15px;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+
+            > .left-part {
+                display: flex;
+                align-items: baseline;
+
+
+                > .current-price {
+                    font-size: 30px;
+                    font-family: sans-serif;
+                    font-weight: bold;
+                }
+
+                > .gain-price, > .gain-percent {
+                    margin-left: 10px;
+                    font-size: 14px;
+                }
+
+                &.gain-more {
+                    color: $--gain-more-color;
+                }
+
+                &.gain-less {
+                    color: $--gain-less-color;
+                }
+            }
+
+            > .right-part {
+                font-size: 12px;
+                color: #aaa;
+            }
+
+        }
+
+        > .stock-info-form {
+            padding: 0 15px;
+            overflow: hidden;
+
+            .el-form-item {
+                $form-item-height: 20px;
+                margin-right: 0;
+                margin-bottom: 0;
+                height: $form-item-height;
+                display: flex;
+                float: left;
+                width: 25%;
+
+                &.gain-more {
+                    color: $--gain-more-color;
+                }
+
+                &.gain-less {
+                    color: $--gain-less-color;
+                }
+
+                > label {
+                    font-size: 13px !important;
+                    padding-right: 5px;
+                    line-height: $form-item-height;
+                }
+
+                > .el-form-item__content {
+                    line-height: $form-item-height !important;
+
+                    > span {
+                        font-size: 13px !important;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+
+        > .k-line {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            width: 100%;
+        }
+    }
+}
+
+.el-loading-mask {
+    margin: 10px;
+    border-radius: 2px;
+    overflow: hidden;
+    height: 520px;
+}
