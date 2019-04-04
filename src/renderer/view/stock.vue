@@ -1,6 +1,7 @@
 <template>
-  <div class="stock-window" v-if="stock" v-loading.fullscreen.lock="loading">
+  <div class="stock-window" v-if="stock">
     <div class="window-content">
+      <!--个股名称代码-->
       <div class="stock-top">
         <h2 class="stock-name">
           {{stock.name}}
@@ -12,6 +13,7 @@
           </a>
         </div>
       </div>
+      <!--股价部分-->
       <div class="price-row">
         <div class="left-part" :class="comparePrice(stock.gain.price,0)">
           <span class="current-price">
@@ -25,10 +27,10 @@
         </span>
         </div>
         <div class="right-part">
-          <!--<span class="market-status">交易中</span>-->
           <span class="current-time"> {{transDate(stock.time)}} (数据获取时间)</span>
         </div>
       </div>
+      <!--个股信息-->
       <el-form label-position="left" inline class="stock-info-form">
         <el-form-item label="最高:" :class="comparePrice(stock.highest,stock.yesterday)">
           <span>{{stock.highest.toFixed(2)}}</span>
@@ -70,12 +72,15 @@
           <span>{{stock.float}}亿</span>
         </el-form-item>
       </el-form>
+      <!--K线图/买卖/成交-->
       <div class="k-line">
+        <!--K线图-->
         <div class="line-picture">
           <img :src="kline" draggable="false">
         </div>
         <div class="order-list">
           <p class="inner-title">五档盘口</p>
+          <!--卖手-->
           <ul class="sell-order">
             <li v-for="(item,index) in reverseSell">
               <span class="order-index">卖{{reverseSell.length - index}}</span>
@@ -84,6 +89,7 @@
               <span class="order-count">{{transVolume(item.count)}}</span>
             </li>
           </ul>
+          <!--买手-->
           <ul class="buy-order">
             <li v-for="(item,index) in stock.buy">
               <span class="order-index">买{{index+1}}</span>
@@ -93,7 +99,8 @@
             </li>
           </ul>
           <p class="inner-title">成交明细</p>
-          <ul class="deal-detail" v-if="this.stocksIndex.indexOf(this.code)===-1">
+          <!--实时成交-->
+          <ul class="deal-detail" v-if="this.stockIndex.indexOf(this.code)===-1">
             <li v-for="item in reverseDeal">
               <span class="deal-time">{{item.time}}</span>
               <span class="deal-price"
@@ -108,32 +115,35 @@
 </template>
 
 <script>
+  import {apiUrl, timeSpan, stockIndex} from '../libs/constant' // api,请求间隔,三大指数
   const ipc = window.require('electron').ipcRenderer
 
   export default {
     data () {
       return {
-        stock: null,
-        loading: false,
-        kline: null,
-        stocksIndex: ['sh000001', 'sz399001', 'sz399006'] // 指数
+        stock: null, // 个股详情
+        kline: null, // k线图
+        interval: null, // 轮询
+        loading: null, // 弹窗
+        stockIndex: stockIndex
       }
     },
     mounted () {
-      // 轮训获取数据
-      if (this.code) {
-        setInterval(this.fetchData, 5000)
-      }
-      ipc.on('change-code', (event, arg) => {
-        this.loading = true
-        this.fetchData()
-        this.$router.replace({name: 'stock', params: {code: arg}})
-      })
+      this.fetchData() // 第一次进来获取数据
+      this.bindIPC() // 绑定线程事件
+      clearInterval(this.interval) // 先清除前面的轮询
+      this.interval = setInterval(this.fetchData, timeSpan) // 再开始新的轮询获取数据
     },
     methods: {
-      // 获取数据
+      /**
+       * 获取数据
+       */
       fetchData () {
-        this.$http.get('http://qt.gtimg.cn/q=' + this.code).then(res => {
+        let times = 0 // 请求成功次数
+        // 获取个股详细信息
+        this.$http.get(apiUrl, {
+          params: {q: this.code}
+        }).then(res => {
           const item = res.data.split('"')[1].split('~')
           const deal = item[29].split('|')
           this.stock = {
@@ -218,62 +228,66 @@
               down: parseFloat(item[48])// 跌停
             }
           }
-          this.loading = false
+          times++
+          this.checkLoadFinish(times)
         })
+        // 获取K线图
         this.$http.get(`http://imgnode.gtimg.cn/hq_img`, {
           params: {
             code: this.code,
             type: 'minute',
             size: 1
-            // proj: 'news?0.0680712785669062'
           },
           responseType: 'arraybuffer'
         }).then(res => {
           const result = 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
           this.kline = result
+          times++
+          this.checkLoadFinish(times)
         })
       },
-      // 关闭窗口
-      setWinClose () {
-        ipc.send('sub-window-close')
-      },
       /**
-       * 比较两个值
-       * @param value 被比较值
-       * @param compare 比较值
-       * @returns {string} 类名
+       * 检查请求次数，关闭弹窗
+       * @param times {number} - 请求完成次数
        */
-      comparePrice (value, compare) {
-        return value > compare ? 'gain-more' : (value < compare ? 'gain-less' : '')
-      },
-      // 将金额转为万为单位
-      transVolume (number) {
-        number = parseInt(number) + ''
-        if (number.length > 4) {
-          let integer = number.substring(0, number.length - 4)
-          let decimal = integer.length > 3 ? '' : ('.' + number.substring(number.length - 5, number.length - 3))
-          return integer + decimal + '万'
-        } else {
-          return number
+      checkLoadFinish (times) {
+        if (times === 2 && this.loading !== null) {
+          this.loading.close()
         }
       },
-      transDate (str) {
-        let year = str.substring(0, 4)
-        let month = str.substring(4, 6)
-        let day = str.substring(6, 8)
-        let hour = str.substring(8, 10)
-        let minute = str.substring(10, 12)
-        let second = str.substring(12, 14)
-        return `${year}年${month}月${day}日 ${hour}:${minute}:${second}`
+
+      /**
+       * 绑定当前窗口IPC事件
+       */
+      bindIPC () {
+        ipc.on('change-code', (event, arg) => {
+          // 如果重复则不执行跳转
+          if (this.code !== arg) {
+            this.$router.replace({name: 'stock', params: {code: arg}})
+            this.loading = this.$loading({
+              lock: true,
+              text: ''
+            })
+          }
+        })
+      },
+      /**
+       * 关闭窗口
+       */
+      setWinClose () {
+        ipc.send('sub-window-close')
       }
     },
     computed: {
+      // 获取当前页面个股代码
       code () {
         return this.$route.params['code']
       },
+      // 倒序卖手
       reverseSell () {
         return this.stock.sell.reverse()
       },
+      // 倒序实时成交
       reverseDeal () {
         return this.stock.deal.reverse()
       }

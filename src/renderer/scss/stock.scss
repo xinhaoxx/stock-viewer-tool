@@ -80,7 +80,7 @@ $--gain-less-color: #2CB532; // 绿色
             > .left-part {
                 display: flex;
                 align-items: baseline;
-
+                color: #555;
 
                 > .current-price {
                     font-size: 30px;
@@ -268,9 +268,10 @@ $--gain-less-color: #2CB532; // 绿色
     }
 }
 
+// 修改加载中遮罩样式
 .el-loading-mask {
     margin: 10px;
     border-radius: 2px;
     overflow: hidden;
-    height: 520px;
+    height: 535px;
 }
