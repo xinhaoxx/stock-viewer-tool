@@ -7,12 +7,12 @@ export default new Router({
   mode: 'hash',
   routes: [
     {
-      path: '/',
+      path: '/index',
       name: 'index',
       component: require('@/view/index').default
     },
     {
-      path: '/stock',
+      path: '/stock/:code',
       name: 'stock',
       component: require('@/view/stock').default
     }
