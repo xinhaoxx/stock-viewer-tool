@@ -20,6 +20,7 @@
       <div v-for="(item,index) in indexs"
            :key="index"
            @contextmenu="showContext(item)"
+           @dblclick="showDetail(item)"
            :class="comparePrice(item.gain.percent,0)">
         <div class="upper-info">
           <h3>{{item.name}}</h3>
