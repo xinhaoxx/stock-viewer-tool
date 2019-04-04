@@ -8,8 +8,6 @@
   export default {}
 </script>
 
-<style>
-  html {
-    padding: 10px;
-  }
+<style lang="scss">
+  @import './scss/app';
 </style>

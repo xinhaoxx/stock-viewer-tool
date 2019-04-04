@@ -1,21 +1,6 @@
-$--gain-more-color: #ff5d5d;
-$--gain-less-color: #63b74b;
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Chrome/Safari/Opera */
-    -moz-user-select: none; /* Firefox */
-    user-select: none;
-}
+$--gain-more-color: #ff5d5d; // 红色
+$--gain-less-color: #63b74b; // 绿色
 
-body {
-    font-family: PingFang SC, 'Source Sans Pro', sans-serif;
-    //padding: 2px;
-    background: rgba(0, 0, 0, 0);
-    overflow: hidden;
-}
 
 #box {
     width: 100%;
@@ -159,7 +144,7 @@ body {
                     color: #000;
                     height: 14px;
                     max-width: 70px;
-                    white-space:nowrap;
+                    white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
@@ -227,50 +212,8 @@ body {
     }
 }
 
-/* scrollbar's style
--------------------------- */
-$--scroll-bar-color: #333;
-::selection {
-    background: #ddd;
-    color: $--scroll-bar-color;
-}
 
-::-webkit-selection {
-    background: #ddd;
-    color: $--scroll-bar-color;
-}
-
-::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-    overflow: auto;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 15px;
-}
-
-::-webkit-scrollbar-track {
-    background-color: #eee;
-}
-
-
-/* iconfont's default style
--------------------------- */
-
-[class^="icon-"] {
-    display: inline-block;
-    font-family: "icon" !important;
-    font-size: 16px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-
-/* 弹窗样式
----------------------*/
+// element's dialog rewrite
 .el-dialog__wrapper {
     top: 50px;
     left: 10px;
