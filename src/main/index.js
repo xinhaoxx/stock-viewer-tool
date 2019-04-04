@@ -197,8 +197,8 @@ const mainMouseLeave = function () {
 let subWindow // 子窗口
 const createSubWindow = function () {
   subWindow = new BrowserWindow({
-    width: 545,
-    height: 630,
+    width: 660,
+    height: 555,
     frame: false,
     transparent: true,
     alwaysOnTop: true,

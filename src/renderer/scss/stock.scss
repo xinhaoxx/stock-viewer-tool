@@ -1,5 +1,5 @@
-$--gain-more-color: #ff5d5d; // 红色
-$--gain-less-color: #63b74b; // 绿色
+$--gain-more-color: #F94848; // 红色
+$--gain-less-color: #2CB532; // 绿色
 
 .stock-window {
     width: 100%;
@@ -25,7 +25,7 @@ $--gain-less-color: #63b74b; // 绿色
                 flex: 1;
                 margin-left: 5px;
                 font-size: 18px;
-                font-weight: normal;
+                font-weight: 300;
                 color: #888;
             }
 
@@ -114,7 +114,7 @@ $--gain-less-color: #63b74b; // 绿色
             overflow: hidden;
 
             .el-form-item {
-                $form-item-height: 20px;
+                $form-item-height: 21px;
                 margin-right: 0;
                 margin-bottom: 0;
                 height: $form-item-height;
@@ -131,16 +131,21 @@ $--gain-less-color: #63b74b; // 绿色
                 }
 
                 > label {
+                    width: 50px;
                     font-size: 13px !important;
                     padding-right: 5px;
                     line-height: $form-item-height;
+                    color: #333;
                 }
 
                 > .el-form-item__content {
                     line-height: $form-item-height !important;
 
                     > span {
+                        display: inline-block;
+                        height: 20px;
                         font-size: 13px !important;
+                        line-height: $form-item-height !important;
                         font-weight: bold;
                     }
                 }
@@ -149,9 +154,116 @@ $--gain-less-color: #63b74b; // 绿色
 
         > .k-line {
             margin-top: 15px;
-            padding-top: 15px;
             border-top: 1px solid #eee;
             width: 100%;
+            display: flex;
+
+            > .line-picture {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+
+            > .order-list {
+                border-left: 1px solid #eee;
+
+                > .inner-title {
+                    text-align: center;
+                    font-size: 12px;
+                    background-color: #fafafa;
+                    border-bottom: 1px solid #eaeaea;
+                }
+
+                $list-line-height: 18px;
+
+                > ul.sell-order, > ul.buy-order {
+                    padding: 2px 8px;
+                    list-style: none;
+                    border-bottom: 1px solid #eaeaea;
+
+                    > li {
+                        font-size: 11px;
+                        line-height: $list-line-height;
+                        width: 120px;
+                        display: flex;
+
+                        > span {
+                            display: inline-block;
+                        }
+
+                        > .order-index {
+                            width: 30px;
+                        }
+
+                        > .order-price {
+                            width: 60px;
+                            text-align: center;
+                            color: #888;
+
+                            &.gain-more {
+                                color: $--gain-more-color;
+                            }
+
+                            &.gain-less {
+                                color: $--gain-less-color;
+                            }
+                        }
+
+                        > .order-count {
+                            width: 60px;
+                            text-align: right;
+                        }
+
+                    }
+                }
+
+                > ul.deal-detail {
+                    padding: 3px 8px;
+                    list-style: none;
+
+                    > li {
+                        font-size: 11px;
+                        line-height: $list-line-height;
+                        width: 120px;
+                        display: flex;
+
+                        > span {
+                            display: inline-block;
+                        }
+
+                        > .deal-time {
+                            width: 40px;
+                        }
+
+                        > .deal-price {
+                            width: 60px;
+                            text-align: center;
+
+                            &.gain-more {
+                                color: $--gain-more-color;
+                            }
+
+                            &.gain-less {
+                                color: $--gain-less-color;
+                            }
+                        }
+
+                        > .deal-count {
+                            width: 40px;
+                            text-align: right;
+
+                            &.deal-buy {
+                                color: $--gain-more-color;
+                            }
+
+                            &.deal-sell {
+                                color: $--gain-less-color;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
