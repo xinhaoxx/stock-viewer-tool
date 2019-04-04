@@ -21,7 +21,7 @@
               :value="item.market+item.code"
               :popper-append-to-body="false">
         <div class="hint-option-item">
-          <span class="hint-market">{{ getMarketName(item.market) }}</span>
+          <span class="hint-market">{{ transMarketName(item.market) }}</span>
           <span class="hint-name">{{ item.name }}</span>
           <span class="hint-code">{{ item.code }}</span>
           <span class="hint-letter">{{ item.letter }}</span>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  const indexs = ['sh000001', 'sz399001', 'sz399006'] // 指数
+  import {stockIndex} from '../libs/constant'
 
   export default {
     data () {
@@ -43,20 +43,25 @@
       }
     },
     methods: {
-      // 显示
-      show (number = null) {
+      /**
+       * 显示当前添加自选股的弹窗
+       * @param key {string|*} - 按键映射的键值
+       */
+      show (key = null) {
         this.isVisible = !this.isVisible
         if (!this.isVisible) {
           this.$refs['codeSelect'].blur()
         } else {
           setTimeout(() => {
-            this.code = number
+            this.code = key
             this.hints = []
             this.$refs['codeSelect'].focus()
           }, 1)
         }
       },
-      // 获取提示
+      /**
+       * element-ui 下拉远程获取自选股关键字提示方法
+       */
       fetchHint (query) {
         this.$http.get(`http://smartbox.gtimg.cn/s3/?t=all&q=${query}&cb=zepto_suggest_1553825409638`).then(res => {
           let data = res.data.substring(8, res.data.length - 1).split('^')
@@ -83,13 +88,16 @@
           })
         })
       },
-      // 执行添加操作
+      /**
+       * 执行添加个股
+       * @param code {string} - 需要添加的个股代码
+       */
       handleAction (code) {
         let storage = localStorage.getItem('optionals')
         if (storage !== null && storage !== '') {
           let splitCode = storage.split(',') // 获取存储的代码
           // 判断是否存在
-          if (splitCode.indexOf(code) > -1 || indexs.indexOf(code) > -1) {
+          if (splitCode.indexOf(code) > -1 || stockIndex.indexOf(code) > -1) {
             this.$toasted.show('已存在股票代码', {
               theme: 'toasted-primary',
               position: 'bottom-center',
@@ -115,18 +123,9 @@
           this.refreshOptionals()
         }
       },
-      // 获取市场名称
-      getMarketName (mk) {
-        switch (mk) {
-          case 'sh':
-            return '上证'
-          case 'sz':
-            return '深证'
-          case 'hk':
-            return '港股'
-        }
-      },
-      // 刷新
+      /**
+       * 重置下拉的所有提示选项
+       */
       refreshOptionals () {
         this.code = null
         this.isVisible = false
