@@ -20,7 +20,7 @@
       <div v-for="(item,index) in indexs"
            :key="index"
            @contextmenu="showContext(item)"
-           :class="{'gain-more':item.gain.percent>0,'gain-less':item.gain.percent<0}">
+           :class="comparePrice(item.gain.percent,0)">
         <div class="upper-info">
           <h3>{{item.name}}</h3>
           <p>{{item.price.toFixed(2)}}</p>
@@ -71,11 +71,11 @@
           <template slot-scope="props">
             <template v-if="!props.row.status">
             <span class="gain-price"
-                  :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">
+                  :class="comparePrice(props.row.gain.percent,0)">
               {{props.row.gain.price>0?'+':''}}{{props.row.gain.price.toFixed(2)}}
             </span>
               <span class="gain-percent"
-                    :class="{'gain-more':props.row.gain.percent>0,'gain-less':props.row.gain.percent<0}">
+                    :class="comparePrice(props.row.gain.percent,0)">
               {{props.row.gain.percent>0?'+':''}}{{props.row.gain.percent.toFixed(2)}}%
             </span>
             </template>
@@ -143,9 +143,6 @@
       document.addEventListener('mouseleave', this.mouseLeave)
     },
     methods: {
-      showDetail () {
-        ipc.send('create')
-      },
       // 获取自选股数据
       fetchData () {
         let index = stocksIndex.map(item => 's_' + item) // 接口需要加前缀
@@ -194,7 +191,9 @@
         })
         this.updateToolTips(this.optionals)
       },
-
+      showDetail (row) {
+        ipc.send('create', row.code)
+      },
       // 关闭窗口
       setWinClose () {
         ipc.send('main-window-close')
@@ -304,6 +303,15 @@
       // 鼠标移出
       mouseLeave () {
         ipc.send('main-mouse-leave')
+      },
+      /**
+       * 比较两个值
+       * @param value 被比较值
+       * @param compare 比较值
+       * @returns {string} 类名
+       */
+      comparePrice (value, compare) {
+        return value > compare ? 'gain-more' : (value < compare ? 'gain-less' : '')
       }
     }
   }

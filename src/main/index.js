@@ -17,14 +17,14 @@ const winURL = process.env.NODE_ENV === 'development'
 
 // 初始化应用
 function init () {
+  createSubWindow()
   createWindow()
 }
-
-let mainWindow // 主窗体
 
 /**
  * 创建主窗体
  */
+let mainWindow // 主窗体
 function createWindow () {
   mainWindow = new BrowserWindow({
     width: 420,
@@ -39,7 +39,7 @@ function createWindow () {
     webPreferences: {webSecurity: false},
     useContentSize: true
   })
-  mainWindow.loadURL(winURL) // 默认加载根路径
+  mainWindow.loadURL(winURL + '#/index') // 默认加载根路径
   mainWindow.on('closed', () => {
     app.quit()
   })
@@ -119,12 +119,10 @@ const createMainIPCListener = function () {
   ipcMain.on('open-devtools', () => {
     mainWindow.openDevTools()
   })
-  ipcMain.on('create', () => {
-    let child = new BrowserWindow({
-      alwaysOnTop: true
-    })
-    child.loadURL(winURL + '#/stock')
-    child.show()
+  // 显示详情窗口
+  ipcMain.on('create', (event, arg) => {
+    if (!subWindow.isVisible()) subWindow.show()
+    subWindow.webContents.send('change-code', arg)
   })
 }
 
@@ -191,4 +189,29 @@ const mainMouseLeave = function () {
       isAnimating = false
     }, 300)
   }
+}
+
+/**
+ * 创建子窗口
+ */
+let subWindow // 子窗口
+const createSubWindow = function () {
+  subWindow = new BrowserWindow({
+    width: 545,
+    height: 630,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    maximizable: false,
+    resizable: false,
+    skipTaskbar: true,
+    focusable: true,
+    webPreferences: {webSecurity: false},
+    useContentSize: true
+  })
+  subWindow.loadURL(winURL + '#/stock/sh000001')
+  subWindow.hide()
+  ipcMain.on('sub-window-close', () => {
+    subWindow.hide()
+  })
 }
